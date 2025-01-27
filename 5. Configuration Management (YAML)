@@ -1,0 +1,16 @@
+# app-config.yaml
+agricultural_params:
+  lime_efficiency:
+    sandy: 0.5
+    loam: 0.8
+    clay: 1.2
+  fertilizer_types:
+    N: 
+      name: "Urea"
+      npk_ratio: [46, 0, 0]
+    P:
+      name: "DAP"
+      npk_ratio: [18, 46, 0]
+  optimal_ranges:
+    ph: [5.5, 6.8]
+    organic_matter: [2.0, 5.0]
