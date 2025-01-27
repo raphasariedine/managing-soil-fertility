@@ -1,0 +1,32 @@
+// server.js
+const express = require('express');
+const bodyParser = require('body-parser');
+const { PythonShell } = require('python-shell');
+
+const app = express();
+app.use(bodyParser.json());
+
+// Crop database endpoint
+app.get('/api/crops', (req, res) => {
+  const crops = [
+    { name: 'Corn', min_N: 150, min_P: 40, min_K: 100, optimal_ph: 6.0 },
+    { name: 'Soybean', min_N: 100, min_P: 30, min_K: 80, optimal_ph: 6.5 }
+  ];
+  res.json(crops);
+});
+
+// Recommendation endpoint
+app.post('/api/analyze', (req, res) => {
+  const options = {
+    mode: 'text',
+    scriptPath: './engine',
+    args: [JSON.stringify(req.body)]
+  };
+
+  PythonShell.run('fertilizer_calculator.py', options, (err, results) => {
+    if (err) throw err;
+    res.json(JSON.parse(results[0]));
+  });
+});
+
+app.listen(3000, () => console.log('Server running on port 3000'));
