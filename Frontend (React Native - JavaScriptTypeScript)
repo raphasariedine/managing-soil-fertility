@@ -1,0 +1,42 @@
+// SoilInputForm.tsx
+import React, { useState } from 'react';
+import { View, TextInput, Picker } from 'react-native';
+
+interface SoilData {
+  pH: string;
+  nitrogen: string;
+  phosphorus: string;
+  potassium: string;
+  organicMatter: string;
+  texture: 'sandy' | 'clay' | 'loam';
+}
+
+const SoilInputForm: React.FC = () => {
+  const [soilData, setSoilData] = useState<SoilData>({
+    pH: '',
+    nitrogen: '',
+    phosphorus: '',
+    potassium: '',
+    organicMatter: '',
+    texture: 'loam'
+  });
+
+  return (
+    <View>
+      <TextInput
+        placeholder="Soil pH"
+        keyboardType="numeric"
+        onChangeText={text => setSoilData({...soilData, pH: text})}
+      />
+      <Picker
+        selectedValue={soilData.texture}
+        onValueChange={itemValue => 
+          setSoilData({...soilData, texture: itemValue})}>
+        <Picker.Item label="Sandy" value="sandy" />
+        <Picker.Item label="Clay" value="clay" />
+        <Picker.Item label="Loam" value="loam" />
+      </Picker>
+      {/* Additional input fields for other parameters */}
+    </View>
+  );
+};
