@@ -1,0 +1,35 @@
+# fertilizer_calculator.py
+import pandas as pd
+
+class SoilRecommender:
+    def __init__(self, crop_db_path='crop_database.csv'):
+        self.crop_db = pd.read_csv(crop_db_path)
+        
+    def calculate_lime(self, current_ph, target_ph, soil_texture):
+        """
+        Calculate lime requirement based on USDA guidelines
+        """
+        ph_diff = target_ph - current_ph
+        texture_factors = {'sandy': 0.5, 'loam': 0.8, 'clay': 1.2}
+        return max(0, ph_diff * texture_factors[soil_texture] * 1000)  # kg/ha
+
+    def recommend_fertilizer(self, soil_npk, crop_type):
+        crop_req = self.crop_db[self.crop_db['crop'] == crop_type].iloc[0]
+        recommendations = {}
+        
+        for nutrient in ['N', 'P', 'K']:
+            deficit = crop_req[f'min_{nutrient}'] - soil_npk[nutrient]
+            if deficit > 0:
+                recommendations[nutrient] = {
+                    'amount': deficit * 1.2,  # 20% efficiency factor
+                    'type': self.get_fertilizer_type(nutrient)
+                }
+        return recommendations
+
+    def get_fertilizer_type(self, nutrient):
+        fertilizer_map = {
+            'N': 'Urea (46-0-0)',
+            'P': 'DAP (18-46-0)',
+            'K': 'Muriate of Potash (0-0-60)'
+        }
+        return fertilizer_map.get(nutrient, 'Compound fertilizer')
