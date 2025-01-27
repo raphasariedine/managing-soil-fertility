@@ -1,0 +1,28 @@
+-- plots.sql
+CREATE TABLE plots (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    area_ha FLOAT,
+    coordinates GEOGRAPHY(POLYGON),
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE soil_samples (
+    id SERIAL PRIMARY KEY,
+    plot_id INTEGER REFERENCES plots(id),
+    ph FLOAT,
+    nitrogen FLOAT,
+    phosphorus FLOAT,
+    potassium FLOAT,
+    organic_matter FLOAT,
+    texture VARCHAR(50),
+    sample_date DATE
+);
+
+CREATE TABLE recommendations (
+    id SERIAL PRIMARY KEY,
+    sample_id INTEGER REFERENCES soil_samples(id),
+    lime_amount FLOAT,
+    fertilizer_data JSONB,
+    created_at TIMESTAMP DEFAULT NOW()
+);
