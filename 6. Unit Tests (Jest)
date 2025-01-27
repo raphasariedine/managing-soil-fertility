@@ -1,0 +1,9 @@
+// calculator.test.js
+const { calculateLime } = require('./fertilizer_calculator');
+
+describe('Lime Calculation', () => {
+  test('calculates correct lime for clay soil', () => {
+    const result = calculateLime(5.0, 6.0, 'clay');
+    expect(result).toBeCloseTo(6.0 * 1000); // 6 pH difference * clay factor 1.2 * 1000
+  });
+});
